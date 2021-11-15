@@ -1,16 +1,19 @@
-# This is a sample Python script.
+import pandas as pd
+import re
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+class TweetCluster:
+    def __init__(self, url):
+        self.data_url = url
+        self.tweet_df = pd.read_csv(url, '|', encoding= 'unicode_escape')
+        self.tweet_df.columns= ['ID', 'Time_Stamp', 'Tweet']
 
+    def pre_process_tweets(self):
+        temp_df = self.tweet_df['Tweet']
+        for i in range(0, len(temp_df)):
+            temp_df.iloc[i] = re.sub(r"[@,#]\S+\s|\s[@,#]\S+|http[s]?:[/]{2,2}\S+", "", temp_df.iloc[i])
+            print(temp_df.iloc[i])
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+#cluster = TweetCluster("https://raw.githubusercontent.com/caige13/Twitter_Clustering_Data/main/foxnewshealth.txt")
+cluster = TweetCluster("./Health-News-Tweets/Health-Tweets/foxnewshealth.txt")
+cluster.pre_process_tweets()
 
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
